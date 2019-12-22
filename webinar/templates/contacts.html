@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+
+<div id="main">
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      app
+    >
+      <v-list dense>
+        <template v-for="item in items">
+          <v-row
+            v-if="item.heading"
+            :key="item.heading"
+            align="center"
+          >
+            <v-col cols="6">
+              <v-subheader v-if="item.heading">
+                [[ item.heading ]]
+              </v-subheader>
+            </v-col>
+            <v-col
+              cols="6"
+              class="text-center"
+            >
+              <a
+                href="#!"
+                class="body-2 black--text"
+              >EDIT</a>
+            </v-col>
+          </v-row>
+          <v-list-group
+            v-else-if="item.children"
+            :key="item.text"
+            v-model="item.model"
+            :prepend-icon="item.model ? item.icon : item['icon-alt']"
+            append-icon=""
+          >
+            <template v-slot:activator>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    [[ item.text ]]
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              link
+            >
+              <v-list-item-action v-if="child.icon">
+                <v-icon>[[child.icon]]</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  [[child.text]]
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item
+            v-else
+            :key="item.text"
+            link
+          >
+            <v-list-item-action>
+              <v-icon>[[ item.icon ]]</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                [[ item.text ]]
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      app
+      color="blue darken-3"
+      dark
+    >
+      <v-toolbar-title
+        style="width: 300px"
+        class="ml-0 pl-3"
+      >
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <span class="hidden-sm-and-down">Contacts</span>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        label="Search"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-apps</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+    </v-app-bar>
+    <v-content>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-card v-for="contact in {{ contacts }}" class="d-inline-block mx-auto">
+          <v-container>
+            <v-row justify="space-betwee">
+              <v-col cols="auto">
+                <v-list-item three-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="headline mb-1">[[ contact.name ]]</v-list-item-title>
+                    <v-list-item-subtitle>[[ contact.jobTitle ]]</v-list-item-subtitle>
+                    <v-list-item-subtitle>[[ contact.company ]]</v-list-item-subtitle>
+                    <v-list-item-subtitle>[[ contact.email ]]</v-list-item-subtitle>
+                    <v-list-item-subtitle>[[ contact.phone ]]</v-list-item-subtitle>
+                    <v-list-item-subtitle>[[ contact.notes ]]</v-list-item-subtitle>
+
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+
+              <v-col
+                cols="auto"
+                class="text-center pl-0"
+              >
+                <v-row
+                  class="flex-column ma-0 fill-height"
+                  justify="center"
+                >
+                  <v-col class="px-0">
+                    <v-btn icon>
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                  </v-col>
+
+                  <v-col class="px-0">
+                    <v-btn icon>
+                      <v-icon>mdi-account-edit-outline</v-icon>
+                    </v-btn>
+                  </v-col>
+
+                  <v-col class="px-0">
+                    <v-btn icon>
+                      <v-icon>mdi-share-variant</v-icon>
+                    </v-btn>
+                  </v-col>
+
+                  <v-col class="px-0">
+                    <v-btn icon>
+                      <v-icon>mdi-send-outline</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-container>
+      <v-footer
+        dark
+        padless
+      >
+        <v-card
+          flat
+          tile
+          class="gray lighten-1 white--text text-center"
+        >
+          <v-card-text>
+            <v-btn
+              v-for="icon in footerIcons"
+              :key="icon"
+              class="mx-4 white--text"
+              icon
+            >
+              <v-icon size="24px">[[ icon ]]</v-icon>
+            </v-btn>
+          </v-card-text>
+
+          <v-card-text class="white--text pt-0">
+            <p>django-webinar is open source software and its powered by Django web framework, Vue.js frontend framework and Janus WebRTC gateway its available through the MIT license. If you'd like to get involved in the project read the developers guide, if you'd like custom support contact the development team.</p>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-text class="white--text">
+            &copy [[ new Date().getFullYear() ]] — <strong>The Djinar team</strong>
+          </v-card-text>
+        </v-card>
+      </v-footer>
+    </v-content>
+    <v-btn
+      bottom
+      color="pink"
+      dark
+      fab
+      fixed
+      right
+      @click="dialog = !dialog"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+    <v-dialog
+      v-model="dialog"
+      width="800px"
+    >
+      <v-card>
+        <v-card-title class="blue darken-3 white--text">
+          Create contact
+        </v-card-title>
+        <v-container>
+          <v-row class="mx-2">
+            <v-col
+              class="align-center justify-space-between"
+              cols="12"
+            >
+              <v-row
+                align="center"
+                class="mr-0"
+              >
+                <v-avatar
+                  size="40px"
+                  class="mx-3"
+                >
+                  <img
+                    src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
+                    alt=""
+                  >
+                </v-avatar>
+                <v-text-field
+                  placeholder="Name"
+                />
+              </v-row>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                prepend-icon="mdi-office-building"
+                placeholder="Company"
+              />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                placeholder="Job title"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-email"
+                placeholder="Email"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                type="tel"
+                prepend-icon="mdi-phone"
+                placeholder="(000) 000 - 0000"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-note"
+                placeholder="Notes"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            text
+            @click="dialog = false"
+          >Cancel</v-btn>
+          <v-btn
+            text
+            color="primary"
+            @click="dialog = false"
+          >Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-app>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      delimiters: ['[[', ']]'],
+      el: '#main',
+      vuetify: new Vuetify(),
+      props: {
+        source: String,
+      },
+      data: {
+        dialog: false,
+        drawer: null,
+        items: [
+          { icon: 'mdi-contacts', text: 'Contacts' },
+          { icon: 'mdi-history', text: 'Frequently contacted' },
+          { icon: 'mdi-content-copy', text: 'Duplicates' },
+          {
+            icon: 'mdi-chevron-up',
+            'icon-alt': 'mdi-chevron-down',
+            text: 'Labels',
+            model: true,
+            children: [
+              { icon: 'mdi-plus', text: 'Create label' },
+            ],
+          },
+          {
+            icon: 'mdi-chevron-up',
+            'icon-alt': 'mdi-chevron-down',
+            text: 'More',
+            model: false,
+            children: [
+              { text: 'Import' },
+              { text: 'Export' },
+              { text: 'Print' },
+            ],
+          },
+          { icon: 'mdi-message', text: 'Send feedback' },
+          { icon: 'mdi-help-circle', text: 'Help' },
+        ],
+        footerIcons: [
+          'mdi-github-circle',
+          'mdi-twitter',
+          'mdi-linkedin',
+        ],
+      }
+    })
+  </script>
+  {% block script %} {% endblock %}
+</body>
+</html>
