@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="app">
+
+    </div>
+{% endblock content %}
+
+{% block script %}
+<script>
+new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#app',
+  data: {
+    title: 'Welcome to My Journal'
+  }
+})
+</script>
+{% endblock script %}
