@@ -20,8 +20,13 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('c/', include(('webinar.contacts.urls', 'contacts'), namespace='contacts')),
-    path('e/', include(('webinar.events.urls', 'events'), namespace='events')),
+    path('c/', include(
+        ('webinar.contacts.urls', 'contacts'), namespace='contacts')
+    ),
+    path('e/', include(
+        ('webinar.events.urls', 'events'), namespace='events')
+    ),
+    path('', include(('webinar.home.urls', 'home'), namespace='home')),
 ]
 
 if settings.DEBUG:
