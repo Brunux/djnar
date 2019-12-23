@@ -16,6 +16,13 @@
         dark
       >
         <v-toolbar-title>Djinar</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon href="{% url 'home:index' %}">
+          <v-icon>mdi-apps</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-bell</v-icon>
+        </v-btn>
       </v-app-bar>
 
       <v-content
@@ -43,6 +50,7 @@
                 <v-card-actions>
                   <v-btn
                     color="indigo"
+                    href="{% url 'contacts:index' %}"
                     text
                   >
                     Explore
