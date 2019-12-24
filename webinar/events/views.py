@@ -6,7 +6,7 @@ class EventsView(TemplateView):
 
     [description]
     """
-    template_name = 'base.html'
+    template_name = 'events.html'
     extra_context = {
         'events': [
             {
