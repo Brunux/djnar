@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,12 +93,17 @@
       color="blue darken-3"
       dark
     >
+      <v-toolbar-side-icon>
+        <v-img
+          src="{% static "img/logo_small.png" %}"
+          height="50px" width="50px"
+        >
+      </v-toolbar-side-icon>
       <v-toolbar-title
         style="width: 300px"
         class="ml-0 pl-3"
       >
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <span class="hidden-sm-and-down">Contacts</span>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -108,12 +114,22 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer>
-      <v-btn icon href="{% url 'home:index' %}">
-        <v-icon>mdi-apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon href="{% url 'home:index' %}">
+            <v-icon>mdi-apps</v-icon>
+          </v-btn>
+        </template>
+        <span>Apps</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon href="">
+            <v-icon>mdi-bell</v-icon>
+          </v-btn>
+        </template>
+        <span>Notifications</span>
+      </v-tooltip>
     </v-app-bar>
     <v-content>
       <v-container
@@ -318,12 +334,11 @@
               { text: 'Print' },
             ],
           },
-          { icon: 'mdi-message', text: 'Send feedback' },
-          { icon: 'mdi-help-circle', text: 'Help' },
+          { icon: 'mdi-message-text-outline', text: 'Send feedback' },
+          { icon: 'mdi-help-circle-outline', text: 'Help' },
         ]
       }
     })
   </script>
-  {% block script %} {% endblock %}
 </body>
 </html>
