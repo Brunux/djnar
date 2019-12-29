@@ -123,4 +123,4 @@ dmypy.json
 
 config/settings/secrets.yml
 
-webinar/static/img/.DS_Store
+djinar/static/img/.DS_Store

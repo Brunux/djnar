@@ -1,0 +1,150 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="main">
+    <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+      <v-list dense>
+        <v-subheader class="mt-4 grey--text text--darken-1">CHAT</v-subheader>
+        <v-list>
+          <p>Chat messages here</p>
+        </v-list>
+      </v-list>
+    </v-navigation-drawer>
+    <v-navigation-drawer
+      v-model="drawerRight"
+      app
+      right
+    >
+      <v-list dense>
+        <v-subheader class="mt-4 grey--text text--darken-1">ATTENDANTS</v-subheader>
+        <v-list>
+          <v-list-item
+            v-for="item in items2"
+            :key="item.text"
+            link
+          >
+            <v-list-item-avatar>
+              <img
+                :src="`https://randomuser.me/api/portraits/men/${item.picture}.jpg`"
+                alt=""
+              >
+            </v-list-item-avatar>
+            <v-list-item-title v-text="item.text" />
+          </v-list-item>
+        </v-list>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      app
+      color="grey darken-4"
+      dense
+    >
+      <v-toolbar-side-icon>
+        <v-img
+          src="{% static "img/logo_small.png" %}"
+          height="40px" width="40px"
+        >
+      </v-toolbar-side-icon>
+      <v-spacer></v-spacer>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon>
+            <v-icon>mdi-television-play</v-icon>
+          </v-btn>
+        </template>
+        <span>Start</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon>
+            <v-icon>mdi-television-stop</v-icon>
+          </v-btn>
+        </template>
+        <span>Stop</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon>
+            <v-icon>mdi-reload</v-icon>
+          </v-btn>
+        </template>
+        <span>Restart</span>
+      </v-tooltip>
+      <v-spacer></v-spacer>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" icon href="{% url 'home:index' %}">
+            <v-icon>mdi-apps</v-icon>
+          </v-btn>
+        </template>
+        <span>Apps</span>
+      </v-tooltip>
+    </v-app-bar>
+
+    <v-content>
+      <v-container class="fill-height">
+        <v-row
+          justify="center"
+          align="center"
+        >
+          <v-col class="shrink">
+            <video controls>
+              <source src="mov_bbb.mp4" type="video/mp4">
+              <source src="mov_bbb.ogg" type="video/ogg">
+              Your browser does not support HTML5 video.
+            </video>
+          </v-col>
+        </v-row>
+      </v-container>
+      {% include "footer.html" %}
+    </v-content>
+  </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#main',
+      delimiters: ['[[', ']]'],
+      vuetify: new Vuetify(),
+      props: {
+        source: String,
+      },
+      data: () => ({
+        drawer: true,
+        items: [
+          { icon: 'mdi-trending_up', text: 'Most Popular' },
+          { icon: 'mdi-subscriptions', text: 'Subscriptions' },
+          { icon: 'mdi-history', text: 'History' },
+          { icon: 'mdi-featured_play_list', text: 'Playlists' },
+          { icon: 'mdi-watch_later', text: 'Watch Later' },
+        ],
+        items2: [
+          { picture: 28, text: 'Joseph' },
+          { picture: 38, text: 'Apple' },
+          { picture: 48, text: 'Xbox Ahoy' },
+          { picture: 58, text: 'Nokia' },
+          { picture: 78, text: 'MKBHD' },
+        ],
+      }),
+      created () {
+        this.$vuetify.theme.dark = true
+      },
+    })
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-"""webinar URL Configuration
+"""djinar URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -21,12 +21,12 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('c/', include(
-        ('webinar.contacts.urls', 'contacts'), namespace='contacts')
+        ('djinar.contacts.urls', 'contacts'), namespace='contacts')
     ),
     path('e/', include(
-        ('webinar.events.urls', 'events'), namespace='events')
+        ('djinar.events.urls', 'events'), namespace='events')
     ),
-    path('', include(('webinar.home.urls', 'home'), namespace='home')),
+    path('', include(('djinar.home.urls', 'home'), namespace='home')),
 ]
 
 if settings.DEBUG:

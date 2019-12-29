@@ -23,3 +23,19 @@ class EventsView(TemplateView):
             }
         ]
     }
+
+
+class EventView(TemplateView):
+    """[summary]
+
+    [description]
+    """
+    template_name = 'event.html'
+    extra_context = {
+        'event': [
+            {
+                'title': "Event #1",
+                "date": "19-04-21",
+            }
+        ]
+    }
