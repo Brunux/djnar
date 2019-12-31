@@ -472,8 +472,8 @@
             axios
             .post(this.contactCreateURI, body, config)
             .then(resp => {
-              this.page = 1
-              this.paginateBase(`${this.contactsURI}?page=${this.page}`);
+              this.contactsFilter = this.contactName
+              this.searchContactItems('event');
               this.dialog = false;
               this.$refs.contactItemform.reset()
             })
