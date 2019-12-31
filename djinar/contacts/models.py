@@ -15,12 +15,11 @@ class Contact(TimeStampedModel):
     job_title = models.CharField(_("Job title"), max_length=62)
     company = models.CharField(_("Company Name"), max_length=254)
     email = models.EmailField()
-    contact_number = models.CharField(_("Contact Number"), max_length=14)
+    contact_number = models.CharField(_("Contact Number"), max_length=16)
     notes = models.CharField(_("Notes"), max_length=508)
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        editable=False
     )
 
     class Meta:

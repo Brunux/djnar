@@ -241,84 +241,108 @@
         <v-card>
           <v-card-title class="blue darken-3 white--text">
             Create contact
+            <v-spacer></v-spacer>
+            <v-icon class="white--text">mdi-account-plus-outline</v-icon>
+            <v-progress-linear
+              :active="loadingCreateContact"
+              :indeterminate="loadingCreateContact"
+              absolute
+              bottom
+              color="red accent-2"
+            ></v-progress-linear>
           </v-card-title>
           <v-container>
-            <v-row class="mx-2">
-              <v-col
-                class="align-center justify-space-between"
-                cols="12"
-              >
-                <v-row
-                  align="center"
-                  class="mr-0"
-                >
-                  <v-avatar
-                    size="40px"
-                    class="mx-3"
-                  >
-                    <img
-                      src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                      alt=""
-                    >
-                  </v-avatar>
+            <v-form
+              ref="contactItemform"
+              v-model="valid"
+              lazy-validation
+            >
+              <v-row class="mx-2">
+                <v-col cols="12">
                   <v-text-field
-                    placeholder="Name"
+                      prepend-icon="mdi-account-edit-outline"
+                      placeholder="Full name"
+                      v-model="contactName"
+                      :rules="contactNameRules"
+                    />
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    prepend-icon="mdi-office-building"
+                    placeholder="Company"
+                    v-model="contactCompany"
+                    :rules="contactCompanyRules"
                   />
-                </v-row>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  prepend-icon="mdi-office-building"
-                  placeholder="Company"
-                />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  placeholder="Job title"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  prepend-icon="mdi-email"
-                  placeholder="Email"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  type="tel"
-                  prepend-icon="mdi-phone"
-                  placeholder="(000) 000 - 0000"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  prepend-icon="mdi-note"
-                  placeholder="Notes"
-                />
-              </v-col>
-            </v-row>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    placeholder="Job title"
+                    v-model="contactJobTitle"
+                    :rules="contactJobTitleRules"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    prepend-icon="mdi-email"
+                    placeholder="Email"
+                    v-model="contactEmail"
+                    :rules="contactEmailRules"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    type="tel"
+                    prepend-icon="mdi-phone"
+                    placeholder="+1 (000) 000 0000"
+                    v-model="contactNumber"
+                    :rules="contactNumberRules"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    prepend-icon="mdi-note"
+                    placeholder="Notes"
+                    v-model="contactNotes"
+                    :rules="contactNotesRules"
+                  />
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
           <v-card-actions>
             <v-spacer />
             <v-btn
-              text
-              @click="dialog = false"
-            >Cancel</v-btn>
+              class="ma-2"
+              tile
+              outlined
+              :elevation="3"
+              color="secondary"
+              @click="cancelContactItem"
+            >
+              <v-icon left>mdi-close-circle</v-icon> Cancel
+            </v-btn>
             <v-btn
-              text
+              class="ma-2"
+              tile
               color="primary"
-              @click="dialog = false"
-            >Save</v-btn>
+              outlined
+              :elevation="3"
+              @click="createContactItem"
+            >
+              <v-icon left>mdi-content-save-outline</v-icon> Save
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-app>
   </div>
 
+  {% csrf_token %}
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
+    axios.defaults.withCredentials = true;
     new Vue({
       delimiters: ['[[', ']]'],
       el: '#main',
@@ -328,9 +352,38 @@
       },
       data: {
         contactsURI: "{% url 'contacts:items' %}",
+        contactCreateURI: "{% url 'contacts:create' %}",
+        contactCSRF: document.getElementsByName("csrfmiddlewaretoken")[0].value,
         contactsItems: [],
+        valid: true,
+        contactName: '',
+        contactNameRules: [
+          v => !!v || 'Name is required',
+        ],
+        contactJobTitle: '',
+        contactJobTitleRules: [
+          v => !!v || 'Job Title is required',
+        ],
+        contactCompany: '',
+        contactCompanyRules: [
+          v => !!v || 'Company is required',
+        ],
+        contactEmail: '',
+        contactEmailRules: [
+          v => !!v || 'E-mail is required',
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ],
+        contactNumber: '',
+        contactNumberRules: [
+          v => !!v || 'Contact Number is required',
+          v => (v && v.length <= 16) || 'Contact Number must be less than 16 characters',
+        ],
+        loadingCreateContact: false,
+        contactNotes: '',
+        contactNotesRules: [],
         contactsPagination: {},
         page: 1,
+        itemsPage: 6,
         loading: false,
         dialog: false,
         drawer: null,
@@ -380,7 +433,7 @@
             this.contactsItems = resp.data.results;
             this.contactsPagination.next = resp.data.next;
             this.contactsPagination.previous =  resp.data.previous;
-            this.contactsPagination.pages =  Math.floor(resp.data.count / resp.data.results.length);
+            this.contactsPagination.pages =  Math.ceil(resp.data.count / this.itemsPage);
           })
           .catch(error => {
             console.log(error);
@@ -389,6 +442,58 @@
             this.loading = false;
           });
         },
+        createContactItem: function () {
+          if (this.$refs.contactItemform.validate()) {
+            this.loadingCreateContact = true;
+            let config = {
+              headers: {
+                "X-CSRFToken": this.contactCSRF,
+              }
+            };
+            let body = {
+              "name": this.contactName,
+              "job_title": this.contactJobTitle,
+              "company": this.contactCompany,
+              "email": this.contactEmail,
+              "contact_number": this.contactNumber,
+              "notes": this.contactNotes,
+            }
+            axios
+            .post(this.contactCreateURI, body, config)
+            .then(resp => {
+              this.paginateBase(`${this.contactsURI}?page=1`);
+              this.dialog = false;
+              this.$refs.contactItemform.reset()
+            })
+            .catch(function (error) {
+              if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+              } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+              }
+              console.log(error.config);
+            })
+            .finally(() => {
+              this.loadingCreateContact = false;
+              this.$refs.contactItemform.resetValidation()
+            });
+          }
+        },
+        cancelContactItem: function () {
+          this.$refs.contactItemform.resetValidation()
+          this.$refs.contactItemform.reset()
+          this.dialog = false;
+        }
       },
       mounted() {
         this.paginateBase(`${this.contactsURI}?page=1`);
