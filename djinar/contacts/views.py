@@ -33,7 +33,12 @@ class ContactItemsView(ListAPIView):
     """
     serializer_class = ContactSerializer
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('name', 'email', 'company', 'job_title')
+    search_fields = (
+        'name',
+        'email',
+        'company',
+        'job_title',
+    )
 
     def get_queryset(self):
         """

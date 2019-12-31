@@ -211,7 +211,11 @@
                       </v-tooltip>
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
-                          <v-btn icon v-on="on">
+                          <v-btn
+                            @click.stop="confirmDeleteContactItem(contact, event)"
+                            icon
+                            v-on="on"
+                          >
                             <v-icon>mdi-trash-can-outline</v-icon>
                           </v-btn>
                         </template>
@@ -347,6 +351,63 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog
+        v-model="dialogDeleteContactItem"
+        max-width="320"
+        persistent
+      >
+        <v-card class="grey lighten-4">
+          <v-card-title class="headline blue darken-3 white--text">
+            Delete?
+            <v-spacer></v-spacer>
+            <v-icon class="white--text">mdi-trash-can-outline</v-icon>
+          </v-card-title>
+          <v-card-text class="text-left font-regular">
+            <v-container>
+              <v-row justify="space-between">
+                <v-col cols="auto">
+                  <v-card class="d-inline-block mx-auto">
+                    <v-list-item >
+                      <v-list-item-content>
+                        <v-list-item-title class="headline mb-1">[[ contactDelete.name ]]</v-list-item-title>
+                        <v-list-item-subtitle>[[ contactDelete.job_title ]]</v-list-item-subtitle>
+                        <v-list-item-subtitle>[[ contactDelete.company ]]</v-list-item-subtitle>
+                        <v-list-item-subtitle>[[ contactDelete.email ]]</v-list-item-subtitle>
+                        <v-list-item-subtitle>[[ contactDelete.contact_number ]]</v-list-item-subtitle>
+                        <v-list-item-subtitle>[[ contactDelete.notes ]]</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              class="ma-2"
+              outlined
+              :elevation="3"
+              color="secondary"
+              @click="cancelDeleteContactItem"
+            >
+              Cancel
+            </v-btn>
+
+            <v-btn
+              class="ma-2"
+              color="red accent-4"
+              outlined
+              :elevation="3"
+              @click="deleteContactItem"
+            >
+              Delete
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-app>
   </div>
 
@@ -394,13 +455,15 @@
           v => (v && v.length <= 16) || 'Contact Number must be less than 16 characters',
         ],
         contactEdit: null,
-        contactDelete: null,
+        contactDelete: {},
         loadingCreateContact: false,
         contactNotes: '',
         contactNotesRules: [],
         contactsPagination: {},
         contactsFilter: "",
+        previousContactsFilter: null,
         searchContactTimeout: null,
+        dialogDeleteContactItem: false,
         page: 1,
         itemsPage: 6,
         loading: false,
@@ -544,6 +607,53 @@
           this.contactNumber = contact.contact_number
           this.contactNotes = contact.notes
           this.contactEdit = contact.pid
+        },
+        confirmDeleteContactItem: function (contact, event) {
+          this.loading = true;
+          this.previousContactsFilter = this.contactsFilter;
+          this.contactDelete = contact
+          this.dialogDeleteContactItem = true
+        },
+        deleteContactItem: function () {
+          this.loading = false;
+          let url = this.contactEditURI + "/" + this.contactDelete.pid
+          let config = {
+            headers: {
+              "X-CSRFToken": this.contactCSRF,
+            }
+          };
+          axios.delete(url, config)
+          .then(resp => {
+            this.contactsFilter = this.previousContactsFilter;
+            this.searchContactItems();
+            this.contactDelete = {}
+            this.dialogDeleteContactItem = false
+          })
+          .catch(function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+        },
+        cancelDeleteContactItem: function (contact, event) {
+          this.loading = false;
+          this.dialogDeleteContactItem = false
         },
       },
       created() {
