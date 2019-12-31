@@ -149,7 +149,7 @@
         >
           <v-row dense>
               <v-col v-for="contact in contactsItems"
-                :key="contact.id"
+                :key="contact.pid"
                 cols="4"
               >
               <v-card class="d-inline-block mx-auto">
@@ -199,11 +199,23 @@
 
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
-                          <v-btn icon v-on="on">
+                          <v-btn
+                            @click="editContactItem(contact, $event)"
+                            icon
+                            v-on="on"
+                          >
                             <v-icon>mdi-account-edit-outline</v-icon>
                           </v-btn>
                         </template>
                         <span>Edit</span>
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-btn icon v-on="on">
+                            <v-icon>mdi-trash-can-outline</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Delete</span>
                       </v-tooltip>
 
                     </v-card-actions>
@@ -230,13 +242,14 @@
         fab
         fixed
         right
-        @click="dialog = !dialog"
+        @click="createContactItem"
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-dialog
         v-model="dialog"
         width="800px"
+        @click:outside="cancelContactItem"
       >
         <v-card>
           <v-card-title class="blue darken-3 white--text">
@@ -327,7 +340,7 @@
               color="primary"
               outlined
               :elevation="3"
-              @click="createContactItem"
+              @click="createOrUpdateContactItem"
             >
               <v-icon left>mdi-content-save-outline</v-icon> Save
             </v-btn>
@@ -353,6 +366,8 @@
       data: {
         contactsURI: "{% url 'contacts:items' %}",
         contactCreateURI: "{% url 'contacts:create' %}",
+        // Dummy UUID given for url creation, its removed on created().
+        contactEditURI: "{% url 'contacts:edit' '1512f128-4c4f-4242-8b99-b4f929b55632' %}",
         contactCSRF: document.getElementsByName("csrfmiddlewaretoken")[0].value,
         contactsItems: [],
         valid: true,
@@ -378,6 +393,8 @@
           v => !!v || 'Contact Number is required',
           v => (v && v.length <= 16) || 'Contact Number must be less than 16 characters',
         ],
+        contactEdit: null,
+        contactDelete: null,
         loadingCreateContact: false,
         contactNotes: '',
         contactNotesRules: [],
@@ -454,12 +471,14 @@
           this.page = 1
         },
         createContactItem: function () {
+          this.contactEdit = null
+          this.dialog = !this.dialog
+        },
+        createOrUpdateContactItem: function () {
           if (this.$refs.contactItemform.validate()) {
             this.loadingCreateContact = true;
-            let config = {
-              headers: {
-                "X-CSRFToken": this.contactCSRF,
-              }
+            let headers = {
+              "X-CSRFToken": this.contactCSRF,
             };
             let body = {
               "name": this.contactName,
@@ -469,15 +488,24 @@
               "contact_number": this.contactNumber,
               "notes": this.contactNotes,
             }
-            axios
-            .post(this.contactCreateURI, body, config)
-            .then(resp => {
+            let method = "post";
+            let url = this.contactCreateURI
+            if (this.contactEdit) {
+              method = "put";
+              url = this.contactEditURI + "/" + this.contactEdit
+            }
+            axios({
+              method: method,
+              url: url,
+              data: body,
+              headers: headers,
+            }).then(resp => {
               this.contactsFilter = this.contactName
               this.searchContactItems();
               this.dialog = false;
+              this.contactEdit = null
               this.$refs.contactItemform.reset()
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
               if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
@@ -494,18 +522,34 @@
                 console.log('Error', error.message);
               }
               console.log(error.config);
-            })
-            .finally(() => {
+            }).finally(() => {
               this.loadingCreateContact = false;
               this.$refs.contactItemform.resetValidation()
             });
           }
         },
         cancelContactItem: function () {
+          this.dialog = false;
+          this.contactEdit = null;
           this.$refs.contactItemform.resetValidation()
           this.$refs.contactItemform.reset()
-          this.dialog = false;
-        }
+          this.contactEdit = null
+        },
+        editContactItem: function (contact, event) {
+          this.dialog = true
+          this.contactName = contact.name
+          this.contactJobTitle = contact.job_title
+          this.contactCompany = contact.company
+          this.contactEmail = contact.email
+          this.contactNumber = contact.contact_number
+          this.contactNotes = contact.notes
+          this.contactEdit = contact.pid
+        },
+      },
+      created() {
+        let contactEditURI = this.contactEditURI.split("/")
+        let ___ = contactEditURI.pop()
+        this.contactEditURI = contactEditURI.join("/")
       },
       mounted() {
         this.paginateBase(`${this.contactsURI}?page=${this.page}`);

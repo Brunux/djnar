@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext as _
@@ -21,6 +23,7 @@ class Contact(TimeStampedModel):
         get_user_model(),
         on_delete=models.CASCADE,
     )
+    pid = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
         verbose_name = _("Contact")

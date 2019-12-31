@@ -1,6 +1,10 @@
 from django.views.generic import TemplateView
 from rest_framework import filters
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import (
+    ListAPIView,
+    CreateAPIView,
+    RetrieveUpdateDestroyAPIView
+)
 
 from .models import Contact
 from .serializers import ContactSerializer, ContactCreateSerializer
@@ -56,3 +60,26 @@ class ContactItemCreateView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         request.data.update({"owner": self.request.user.pk})
         return super().create(request, *args, **kwargs)
+
+
+class EditContactItemView(RetrieveUpdateDestroyAPIView):
+    """[summary]
+    Edits or Deletes a contact item.
+
+    [description]
+    This View updates fields for a contact item it can also delete a
+    contact item.
+
+    Extends:
+        RetrieveUpdateDestroyAPIView
+    """
+    serializer_class = ContactSerializer
+    lookup_field = "pid"
+
+    def get_queryset(self):
+        """
+        Return `user` contacts only.
+        """
+        return Contact.objects.filter(
+            owner=self.request.user
+        )

@@ -10,7 +10,7 @@ class ContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contact
-        exclude = ('owner',)
+        exclude = ('owner', 'id')
 
 
 class ContactCreateSerializer(serializers.ModelSerializer):
