@@ -318,6 +318,7 @@
         source: String,
       },
       data: {
+        contactsURI: "{% url 'contacts:items' %}",
         contactsItems: [],
         contactsPagination: {},
         page: 1,
@@ -360,7 +361,7 @@
           this.paginateBase(this.contactsPagination.previous);
         },
         paginateTo: function (event) {
-          this.paginateBase(`/c/items?page=${this.page}`);
+          this.paginateBase(`${this.contactsURI}?page=${this.page}`);
         },
         paginateBase: function (url) {
           this.loading = true;
@@ -381,7 +382,7 @@
         },
       },
       mounted() {
-        this.paginateBase("/c/items?page=1");
+        this.paginateBase(`${this.contactsURI}?page=1`);
       }
     })
   </script>
