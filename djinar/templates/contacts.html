@@ -405,6 +405,13 @@
             >
               Delete
             </v-btn>
+            <v-progress-linear
+              :active="loadingDelete"
+              :indeterminate="loadingDelete"
+              absolute
+              bottom
+              color="red accent-2"
+            ></v-progress-linear>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -467,6 +474,7 @@
         page: 1,
         itemsPage: 6,
         loading: false,
+        loadingDelete: false,
         dialog: false,
         drawer: null,
         items: [
@@ -609,13 +617,12 @@
           this.contactEdit = contact.pid
         },
         confirmDeleteContactItem: function (contact, event) {
-          this.loading = true;
           this.previousContactsFilter = this.contactsFilter;
           this.contactDelete = contact
           this.dialogDeleteContactItem = true
         },
         deleteContactItem: function () {
-          this.loading = false;
+          this.loadingDelete = true;
           let url = this.contactEditURI + "/" + this.contactDelete.pid
           let config = {
             headers: {
@@ -648,11 +655,11 @@
             console.log(error.config);
           })
           .finally(() => {
-            this.loading = false;
+            this.loadingDelete = false;
           });
         },
         cancelDeleteContactItem: function (contact, event) {
-          this.loading = false;
+          this.loadingDelete = false;
           this.dialogDeleteContactItem = false
         },
       },
