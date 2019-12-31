@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext as _
+from model_utils.models import TimeStampedModel
 
-# Create your models here.
 
-
-class Contact(models.Model):
+class Contact(TimeStampedModel):
     """[summary]
     Model for managing `contact` information.
 
@@ -28,5 +27,5 @@ class Contact(models.Model):
         verbose_name = _("Contact")
         verbose_name_plural = _("Contacts")
 
-    def __repr__(self):
+    def __str__(self):
         return str(self.email)

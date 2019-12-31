@@ -137,22 +137,22 @@
           fluid
         >
           <v-row dense>
-              <v-col v-for="contact in {{ contacts }}"
+              <v-col v-for="contact in contactsItems"
+                :key="contact.id"
                 cols="4"
               >
               <v-card class="d-inline-block mx-auto">
                 <v-container>
-                  <v-row justify="space-betwee">
+                  <v-row justify="space-between">
                     <v-col cols="auto">
                       <v-list-item three-line>
                         <v-list-item-content>
                           <v-list-item-title class="headline mb-1">[[ contact.name ]]</v-list-item-title>
-                          <v-list-item-subtitle>[[ contact.jobTitle ]]</v-list-item-subtitle>
+                          <v-list-item-subtitle>[[ contact.job_title ]]</v-list-item-subtitle>
                           <v-list-item-subtitle>[[ contact.company ]]</v-list-item-subtitle>
                           <v-list-item-subtitle>[[ contact.email ]]</v-list-item-subtitle>
-                          <v-list-item-subtitle>[[ contact.phone ]]</v-list-item-subtitle>
+                          <v-list-item-subtitle>[[ contact.contact_number ]]</v-list-item-subtitle>
                           <v-list-item-subtitle>[[ contact.notes ]]</v-list-item-subtitle>
-
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
@@ -200,6 +200,16 @@
                 </v-container>
               </v-card>
             </v-col>
+          </v-row>
+          <v-row dense v-if="contactsItems.length > 0">
+            <v-pagination
+              v-model="page"
+              :length="contactsPagination.pages"
+              :total-visible="7"
+              @next="paginateNext"
+              @previous="paginatePrevious"
+              @input="paginateTo"
+            ></v-pagination>
           </v-row>
         </v-container>
         {% include "footer.html" %}
@@ -298,6 +308,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     new Vue({
       delimiters: ['[[', ']]'],
@@ -307,6 +318,10 @@
         source: String,
       },
       data: {
+        contactsItems: [],
+        contactsPagination: {},
+        page: 1,
+        loading: false,
         dialog: false,
         drawer: null,
         items: [
@@ -336,6 +351,37 @@
           { icon: 'mdi-message-text-outline', text: 'Send feedback' },
           { icon: 'mdi-help-circle-outline', text: 'Help' },
         ]
+      },
+      methods: {
+        paginateNext: function (event) {
+          this.paginateBase(this.contactsPagination.next);
+        },
+        paginatePrevious: function (event) {
+          this.paginateBase(this.contactsPagination.previous);
+        },
+        paginateTo: function (event) {
+          this.paginateBase(`/c/items?page=${this.page}`);
+        },
+        paginateBase: function (url) {
+          this.loading = true;
+          axios
+          .get(url)
+          .then(resp => {
+            this.contactsItems = resp.data.results;
+            this.contactsPagination.next = resp.data.next;
+            this.contactsPagination.previous =  resp.data.previous;
+            this.contactsPagination.pages = resp.data.count / resp.data.results.length;
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+        },
+      },
+      mounted() {
+        this.paginateBase("/c/items?page=1");
       }
     })
   </script>
