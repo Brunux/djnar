@@ -16,15 +16,19 @@ class ContactsView(TemplateView):
 
 class ContactItemsView(ListAPIView):
     """[summary]
-    Gets contacts items paginated
+    Gets contacts items paginated in descending order last
+    modified.
+
     [description]
+    This view should return a list of all the contacts for the currently
+    authenticated user.
     """
     serializer_class = ContactSerializer
 
     def get_queryset(self):
         """
-        This view should return a list of all the contacts
-        for the currently authenticated user.
+        Return `user` contacts only.
         """
-        user = self.request.user
-        return Contact.objects.filter(owner=user).order_by('-modified')
+        return Contact.objects.filter(
+            owner=self.request.user
+        ).order_by('-modified')
