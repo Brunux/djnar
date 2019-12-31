@@ -113,7 +113,7 @@
           label="Search"
           class="hidden-sm-and-down"
           v-model="contactsFilter"
-          @keyup.enter="searchContactItems"
+          @keyup="searchContactTimeOut"
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-tooltip bottom>
@@ -383,6 +383,7 @@
         contactNotesRules: [],
         contactsPagination: {},
         contactsFilter: "",
+        searchContactTimeout: null,
         page: 1,
         itemsPage: 6,
         loading: false,
@@ -417,13 +418,18 @@
         ]
       },
       methods: {
+        searchContactTimeOut: function (event) {
+          clearTimeout(this.searchContactTimeout);
+          this.searchContactTimeout = setTimeout(() => {
+               this.searchContactItems();
+          }, 700);
+        },
         paginateTo: function (event) {
           let url = `${this.contactsURI}?page=${this.page}`;
           if (this.contactsFilter) {
             url = `${url}&search=${this.contactsFilter}`;
           }
           this.paginateBase(url);
-          console.log('On To');
         },
         paginateBase: function (url) {
           this.loading = true;
@@ -442,7 +448,7 @@
             this.loading = false;
           });
         },
-        searchContactItems: function(event) {
+        searchContactItems: function() {
           let url = `${this.contactsURI}?search=${this.contactsFilter}`
           this.paginateBase(url);
           this.page = 1
