@@ -130,7 +130,16 @@
           </template>
           <span>Notifications</span>
         </v-tooltip>
+
+        <v-progress-linear
+          :active="loading"
+          :indeterminate="loading"
+          absolute
+          bottom
+          color="red accent-2"
+        ></v-progress-linear>
       </v-app-bar>
+
       <v-content>
         <v-container
           class="fill-height"
@@ -371,7 +380,7 @@
             this.contactsItems = resp.data.results;
             this.contactsPagination.next = resp.data.next;
             this.contactsPagination.previous =  resp.data.previous;
-            this.contactsPagination.pages = resp.data.count / resp.data.results.length;
+            this.contactsPagination.pages =  Math.floor(resp.data.count / resp.data.results.length);
           })
           .catch(error => {
             console.log(error);
