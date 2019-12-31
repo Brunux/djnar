@@ -473,7 +473,7 @@
             .post(this.contactCreateURI, body, config)
             .then(resp => {
               this.contactsFilter = this.contactName
-              this.searchContactItems('event');
+              this.searchContactItems();
               this.dialog = false;
               this.$refs.contactItemform.reset()
             })
