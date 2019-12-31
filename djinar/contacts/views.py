@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from rest_framework import filters
 from rest_framework.generics import ListAPIView, CreateAPIView
 
 from .models import Contact
@@ -16,17 +17,19 @@ class ContactsView(TemplateView):
 
 class ContactItemsView(ListAPIView):
     """[summary]
-    Gets contacts items paginated in descending order last
-    modified.
+    Gets contacts items paginated in descending order and may be
+    filtered.
 
     [description]
-    This view should return a list of all the contacts for the currently
+    This view should return a list of contacts for the currently
     authenticated user.
 
     Extends:
         ListAPIView
     """
     serializer_class = ContactSerializer
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('name', 'email', 'company', 'job_title')
 
     def get_queryset(self):
         """

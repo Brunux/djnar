@@ -95,7 +95,7 @@
       >
         <v-toolbar-side-icon>
           <v-img
-            src="{% static "img/logo_small.png" %}"
+            src="{% static 'img/logo_small.png' %}"
             height="50px" width="50px"
           >
         </v-toolbar-side-icon>
@@ -112,6 +112,8 @@
           prepend-inner-icon="mdi-magnify"
           label="Search"
           class="hidden-sm-and-down"
+          v-model="contactsFilter"
+          @keyup.enter="searchContactItems"
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-tooltip bottom>
@@ -215,8 +217,6 @@
               v-model="page"
               :length="contactsPagination.pages"
               :total-visible="7"
-              @next="paginateNext"
-              @previous="paginatePrevious"
               @input="paginateTo"
             ></v-pagination>
           </v-row>
@@ -382,6 +382,7 @@
         contactNotes: '',
         contactNotesRules: [],
         contactsPagination: {},
+        contactsFilter: "",
         page: 1,
         itemsPage: 6,
         loading: false,
@@ -416,14 +417,13 @@
         ]
       },
       methods: {
-        paginateNext: function (event) {
-          this.paginateBase(this.contactsPagination.next);
-        },
-        paginatePrevious: function (event) {
-          this.paginateBase(this.contactsPagination.previous);
-        },
         paginateTo: function (event) {
-          this.paginateBase(`${this.contactsURI}?page=${this.page}`);
+          let url = `${this.contactsURI}?page=${this.page}`;
+          if (this.contactsFilter) {
+            url = `${url}&search=${this.contactsFilter}`;
+          }
+          this.paginateBase(url);
+          console.log('On To');
         },
         paginateBase: function (url) {
           this.loading = true;
@@ -441,6 +441,11 @@
           .finally(() => {
             this.loading = false;
           });
+        },
+        searchContactItems: function(event) {
+          let url = `${this.contactsURI}?search=${this.contactsFilter}`
+          this.paginateBase(url);
+          this.page = 1
         },
         createContactItem: function () {
           if (this.$refs.contactItemform.validate()) {
@@ -461,7 +466,8 @@
             axios
             .post(this.contactCreateURI, body, config)
             .then(resp => {
-              this.paginateBase(`${this.contactsURI}?page=1`);
+              this.page = 1
+              this.paginateBase(`${this.contactsURI}?page=${this.page}`);
               this.dialog = false;
               this.$refs.contactItemform.reset()
             })
@@ -496,7 +502,7 @@
         }
       },
       mounted() {
-        this.paginateBase(`${this.contactsURI}?page=1`);
+        this.paginateBase(`${this.contactsURI}?page=${this.page}`);
       }
     })
   </script>
