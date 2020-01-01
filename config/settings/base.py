@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
     # Project
     'djinar.contacts.apps.ContactsConfig',
+    'djinar.events.apps.EventsConfig',
 ]
 
 MIDDLEWARE = [
