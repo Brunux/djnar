@@ -23,11 +23,12 @@ class Contact(TimeStampedModel):
         get_user_model(),
         on_delete=models.CASCADE,
     )
-    pid = models.UUIDField(default=uuid.uuid4)
+    pid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     class Meta:
         verbose_name = _("Contact")
         verbose_name_plural = _("Contacts")
+        ordering = ('-modified', )
 
     def __str__(self):
         return str(self.email)

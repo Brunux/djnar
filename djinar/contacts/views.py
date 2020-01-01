@@ -12,7 +12,7 @@ from .serializers import ContactSerializer, ContactCreateSerializer
 
 class ContactsView(TemplateView):
     """[summary]
-    Servers the base web page for contacts.
+    Serves the base web page for contacts.
 
     [description]
     """
