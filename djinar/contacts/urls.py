@@ -8,6 +8,6 @@ urlpatterns = [
     path('items', views.ContactItemsView.as_view(), name='items'),
     path('create', views.ContactItemCreateView.as_view(), name='create'),
     path('edit/<uuid:pid>',
-         views.EditContactItemView.as_view(),
-         name='edit'),
+         views.ContactItemEditView.as_view(),
+         name='edit')
 ]

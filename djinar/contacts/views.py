@@ -67,7 +67,7 @@ class ContactItemCreateView(CreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class EditContactItemView(RetrieveUpdateDestroyAPIView):
+class ContactItemEditView(RetrieveUpdateDestroyAPIView):
     """[summary]
     Edits or Deletes a contact item.
 
