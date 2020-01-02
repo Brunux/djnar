@@ -94,7 +94,7 @@ class EventItemsDateView(ListAPIView):
             end_date = datetime.strptime(
                 f"{end_date} 23:59:59", "%Y-%m-%d %H:%M:%S",
             )
-        except Exception as e:
+        except Exception:
             return Event.objects.none()
 
         return query_set.filter(
@@ -103,42 +103,42 @@ class EventItemsDateView(ListAPIView):
         ).prefetch_related('attendants')
 
 
-# class EventItemCreateView(CreateAPIView):
-#     """[summary]
-#     Creates a new Event item.
+class EventItemCreateView(CreateAPIView):
+    """[summary]
+    Creates a new Event item.
 
-#     [description]
-#     This view should validate and create a new Event item linking
-#     the item to the current authenticate user.
+    [description]
+    This view should validate and create a new Event item linking
+    the item to the current authenticate user.
 
-#     Extends:
-#         CreateAPIView
-#     """
-#     serializer_class = EventCreateSerializer
+    Extends:
+        CreateAPIView
+    """
+    serializer_class = EventCreateSerializer
 
-#     def create(self, request, *args, **kwargs):
-#         request.data.update({"owner": self.request.user.pk})
-#         return super().create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        request.data.update({"owner": self.request.user.pk})
+        return super().create(request, *args, **kwargs)
 
 
-# class EditEventItemView(RetrieveUpdateDestroyAPIView):
-#     """[summary]
-#     Edits or Deletes a Event item.
+class EventItemEditView(RetrieveUpdateDestroyAPIView):
+    """[summary]
+    Edits or Deletes a Event item.
 
-#     [description]
-#     This View updates fields for a Event item it can also delete a
-#     Event item.
+    [description]
+    This View updates fields for a Event item it can also delete a
+    Event item.
 
-#     Extends:
-#         RetrieveUpdateDestroyAPIView
-#     """
-#     serializer_class = EventSerializer
-#     lookup_field = "pid"
+    Extends:
+        RetrieveUpdateDestroyAPIView
+    """
+    serializer_class = EventCreateSerializer
+    lookup_field = "pid"
 
-#     def get_queryset(self):
-#         """
-#         Return `user` Events only.
-#         """
-#         return Event.objects.filter(
-#             owner=self.request.user
-#         )
+    def get_queryset(self):
+        """
+        Return `user` Events only.
+        """
+        return Event.objects.filter(
+            owner=self.request.user
+        )

@@ -17,7 +17,7 @@ class Event(TimeStampedModel):
     date = models.DateTimeField(_("Date and time"))
     duration = models.PositiveSmallIntegerField(_("Duration in minutes"))
     notes = models.TextField(_("Notes"))
-    attendants = models.ManyToManyField(Contact)
+    attendants = models.ManyToManyField(Contact, blank=True)
     pid = models.UUIDField(default=uuid.uuid4, unique=True)
     owner = models.ForeignKey(
         get_user_model(),
