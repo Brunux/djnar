@@ -44,7 +44,7 @@ class EventTestCase(APITestCase):
             msg=f"Event not created status code: {resp.status_code}",
         )
         event = Event.objects.get(title=event_title)
-        attendants_count = event.attendants.all().count()
+        attendants_count = event.attendants.count()
         self.assertEqual(
             attendants_count,
             1,
@@ -73,7 +73,7 @@ class EventTestCase(APITestCase):
             msg=f"Event not created status code: {resp.status_code}",
         )
         event = Event.objects.get(title=event_title)
-        attendants_count = event.attendants.all().count()
+        attendants_count = event.attendants.count()
         self.assertEqual(
             attendants_count,
             0,
@@ -102,10 +102,10 @@ class EventTestCase(APITestCase):
         event = Event.objects.get(title=event_title)
         endpoint = reverse("events:edit", args=[event.pid])
         event_title = "Test Event Updated !K"
-        event_data.update({
+        event_data = {
             "title": event_title,
             "attendants": [],
-        })
+        }
         resp = self.client.patch(endpoint, event_data, format='json')
         self.assertEqual(
             resp.status_code,
@@ -113,7 +113,7 @@ class EventTestCase(APITestCase):
             msg=f"Event not updated status code: {resp.status_code}",
         )
         event = Event.objects.get(title=event_title)
-        attendants_count = event.attendants.all().count()
+        attendants_count = event.attendants.count()
         self.assertEqual(
             attendants_count,
             0,
