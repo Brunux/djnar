@@ -76,11 +76,10 @@ class EventCreateSerializer(serializers.ModelSerializer):
             link to event]
             event {[`Event` model instance]} -- [Event.attendants to link]
         """
-        if attendants:
-            event.attendants.set(
-                (contact['pid'] for contact in attendants
-                    if contact.get('pid', False))
-            )
+        event.attendants.set(
+            (contact['pid'] for contact in attendants
+                if contact.get('pid', False))
+        )
 
     def _perform_create_or_update(self, validate_data, instance=None):
         """[summary]
