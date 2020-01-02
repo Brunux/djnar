@@ -99,7 +99,11 @@ class ContactTestCase(APITestCase):
         self.assertEqual(
             resp.status_code,
             status.HTTP_200_OK,
-            msg=f"Contact not retrieve by name, status_code {resp.status_code}",
+            msg=f"Contact not retrieved by name, status_code {resp.status_code}",
+        )
+        self.assertTrue(
+            resp.json()["results"][0],
+            msg="Contact not retrieved by name",
         )
         contact_search_email = {
             "search": contact.email
@@ -108,7 +112,11 @@ class ContactTestCase(APITestCase):
         self.assertEqual(
             resp.status_code,
             status.HTTP_200_OK,
-            msg=f"Contact not retrieve by email, status_code {resp.status_code}",
+            msg=f"Contact not retrieved by email, status_code {resp.status_code}",
+        )
+        self.assertTrue(
+            resp.json()["results"][0],
+            msg="Contact not retrieved by email",
         )
         contact_search_company = {
             "search": contact.company
@@ -117,7 +125,11 @@ class ContactTestCase(APITestCase):
         self.assertEqual(
             resp.status_code,
             status.HTTP_200_OK,
-            msg=f"Contact not retrieve by company, status_code {resp.status_code}",
+            msg=f"Contact not retrieved by company, status_code {resp.status_code}",
+        )
+        self.assertTrue(
+            resp.json()["results"][0],
+            msg="Contact not retrieved by company",
         )
         contact_search_job_title = {
             "search": contact.job_title
@@ -126,7 +138,11 @@ class ContactTestCase(APITestCase):
         self.assertEqual(
             resp.status_code,
             status.HTTP_200_OK,
-            msg=f"Contact not retrieve by job_title, status_code {resp.status_code}",
+            msg=f"Contact not retrieved by job_title, status_code {resp.status_code}",
+        )
+        self.assertTrue(
+            resp.json()["results"][0],
+            msg="Contact not retrieved by job_title",
         )
         contact.delete()
 
