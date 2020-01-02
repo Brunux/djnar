@@ -37,11 +37,11 @@ class EventContactLinkCreateSerializer(serializers.Serializer):
 
     def validate_pid(self, data):
         """[summary]
-
+        Returns the Contact instance model instance instead of uuid.
         [description]
 
         Arguments:
-            value {[type]} -- [description]
+            value {[uuid4]} -- [uuid to validate]
         """
         pid_validated = super().validate(data)
         qs = Contact.objects.filter(
