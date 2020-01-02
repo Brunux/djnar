@@ -6,9 +6,7 @@ secrets = load_secrets()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-MAIN_SRC = str(
-    Path(__file__).resolve().parent.parent.parent
-).split('/')[-1]
+MAIN_SRC = 'djinar'
 MEDIA_ROOT = BASE_DIR / f'{MAIN_SRC}/media'
 
 STATIC_URL = '/static/'
