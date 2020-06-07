@@ -16,7 +16,7 @@ class ContactsView(TemplateView):
 
     [description]
     """
-    template_name = 'contacts.html'
+    template_name = 'contacts/contacts.html'
 
 
 class ContactItemsView(ListAPIView):

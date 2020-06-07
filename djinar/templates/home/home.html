@@ -1,0 +1,154 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+
+  <div id="main">
+    <v-app id="inspire">
+      <v-app-bar
+        app
+        color="cyan"
+        dark
+      >
+        <v-toolbar-side-icon>
+          <v-img
+            src="{% static "img/logo_small.png" %}"
+            height="50px" width="50px"
+          >
+        </v-toolbar-side-icon>
+        <v-spacer></v-spacer>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" icon href="{% url 'home:index' %}">
+              <v-icon>mdi-apps</v-icon>
+            </v-btn>
+          </template>
+          <span>Apps</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" icon href="">
+              <v-icon>mdi-bell</v-icon>
+            </v-btn>
+          </template>
+          <span>Notifications</span>
+        </v-tooltip>
+      </v-app-bar>
+
+      <v-content
+        class="mx-auto"
+        max-width="500"
+      >
+        <v-container bg fill-height grid-list-md text-xs-center>
+          <v-layout row wrap align-center>
+            <v-row dense>
+              <v-col
+                cols="4"
+              >
+                <v-card>
+                  <v-img
+                    src="{% static "img/contacts_512.png" %}"
+                    class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                    height="200px"
+                  >
+                    <v-card-title v-text="'Contacts'"></v-card-title>
+                  </v-img>
+
+                  <v-card-actions>
+                    <v-btn
+                      color="pink"
+                      href="{% url 'contacts:index' %}"
+                      text
+                    >
+                      Explore
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                    >
+                      <v-icon>mdi-account-plus-outline</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+              <v-col
+                cols="4"
+              >
+                <v-card>
+                  <v-img
+                    src="{% static "img/calendar_512.png" %}"
+                    class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                    height="200px"
+                  >
+                    <v-card-title v-text="'Events'"></v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-btn
+                      color="pink"
+                      href="{% url 'events:index' %}"
+                      text
+                    >
+                      Explore
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                    >
+                      <v-icon>mdi-calendar-plus</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+              <v-col
+                cols="4"
+              >
+                <v-card>
+                  <v-img
+                    src="{% static "img/account_512.png" %}"
+                    class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                    height="200px"
+                  >
+                    <v-card-title v-text="'Account'"></v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-btn
+                      color="pink"
+                      text
+                    >
+                      Explore
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-layout>
+        </v-container>
+      </v-content>
+      {% include "footer/footer.html" %}
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#main',
+      delimiters: ['[[', ']]'],
+      vuetify: new Vuetify(),
+      props: {
+        source: String,
+      }
+    })
+  </script>
+</body>
+</html>

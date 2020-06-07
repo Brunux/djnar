@@ -11,4 +11,4 @@ class HomeView(TemplateView):
     Extends:
         TemplateView
     """
-    template_name = 'home.html'
+    template_name = 'home/home.html'
