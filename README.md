@@ -15,21 +15,11 @@ Crete a virtual environment use you preferred tool or just
 $ pip install virtualenv
 $ virtualenv venv
 $ source venv/bin/active
-``` 
+```
 
 Install dependencies
 ```sh
 $ pip install -r requirements/local.txt
-```
-
-Run the tests with nice report
-```sh
-$ coverage run -m pytest
-```
-
-Run development server
-```
-$ python manage.py runserver 0:8000
 ```
 
 Create a exclusive Postgres DB docker instance
@@ -59,6 +49,26 @@ DATABASES = {
         "DATABASE_URL", default="postgres://django:4dm1n4dm1n@localhost:25432/djinar"
     )
 }
+```
+
+Apply migrations
+```sh
+$ python manage.py migrate
+```
+
+Run the tests with nice report
+```sh
+$ coverage run -m pytest
+```
+
+Run development server
+```
+$ python manage.py runserver 0:8000
+```
+
+Open the webinar interface
+```
+http://localhost:8000/
 ```
 
 For more information, see TODO.
