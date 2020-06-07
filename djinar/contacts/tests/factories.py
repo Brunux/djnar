@@ -1,4 +1,4 @@
-"""Factories that you love."""
+"""Contacts factories that you love."""
 import factory
 import factory.fuzzy
 from django.contrib.auth import get_user_model
@@ -13,7 +13,7 @@ class ContactFactory(factory.django.DjangoModelFactory):
     test_contact = ContactFactory(owner=user_instance)
     """
     name = factory.Faker('name')
-    job_title = factory.fuzzy.FuzzyText()
+    job_title = factory.Faker('job')
     company = factory.Faker('company')
     email = factory.Faker('email')
     contact_number = factory.Faker('phone_number')

@@ -1,19 +1,17 @@
 from djinar.contacts.models import Contact
 from django.urls import reverse
-from djinar.users.tests.factories import UserFactory
 from rest_framework import status
-from rest_framework.test import APITestCase
+
+from djinar.common.tests import APILoggedInTest
 
 
-class ContactTestCase(APITestCase):
-    def setUp(self):
-        user_password = "abc123"
-        self.user = UserFactory(password=user_password)
-        is_logedin = self.client.login(
-            username=self.user.username, password=user_password
-        )
-        if not is_logedin:
-            raise Exception("Unable to login test client")
+class ContactTestCase(APILoggedInTest):
+    """Main authenticated tests cases."""
+
+    def setUp(self, *args, **kwargs):
+        """Adds `self.contact_data` for `Contact` testing."""
+
+        super().setUp(*args, **kwargs)
 
         self.contact_data = {
             "job_title": "Sr. Python Developer",
@@ -116,6 +114,7 @@ class ContactTestCase(APITestCase):
 
     def test_contact_update(self):
         """Test contact creation endpoint."""
+
         contact_name = "Test Contact Creation for Update"
         contact_data = self.contact_data
         contact_data.update({
@@ -146,6 +145,7 @@ class ContactTestCase(APITestCase):
 
     def test_contact_deletion(self):
         """Test contact deletion endpoint."""
+
         contact_name = "Test Contact for Deletion"
         contact_data = self.contact_data
         contact_data.update({

@@ -8,12 +8,9 @@ from djinar.contacts.models import Contact
 
 
 class Event(TimeStampedModel):
-    """[summary]
-    Events for webinar like sessions.
+    """Events for webinar like sessions."""
 
-    [description]
-    """
-    title = models.CharField(_("Title"), max_length=128)
+    title = models.CharField(_("Title"), max_length=255)
     date = models.DateTimeField(_("Date and time"))
     duration = models.PositiveSmallIntegerField(_("Duration in minutes"))
     notes = models.TextField(_("Notes"))
@@ -30,4 +27,4 @@ class Event(TimeStampedModel):
         ordering = ('-modified', )
 
     def __str__(self):
-        return str(self.title)
+        return f"{self.title}"
