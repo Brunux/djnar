@@ -121,6 +121,5 @@ dmypy.json
 
 # End of https://www.gitignore.io/api/django
 
-config/settings/secrets.yml
-
-djinar/static/img/.DS_Store
+# macOS
+**/.DS_Store
