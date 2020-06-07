@@ -18,7 +18,7 @@ class EventsView(TemplateView):
 
     [description]
     """
-    template_name = 'events.html'
+    template_name = 'events/events.html'
 
 
 class EventItemsView(ListAPIView):
