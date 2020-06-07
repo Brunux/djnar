@@ -52,10 +52,15 @@ jobs:
     - name: Apply migrations
       run: |
         python manage.py migrate
-    - name: Test and publish code coverage
+    - name: Run tests
+      run: |
+        coverage run -m pytest
+    - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.6.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
-        coverageCommand: coverage run -m pytest
+        coverageCommand: coverage xml
         debug: true
+        coverageLocations: |
+          ${{github.workspace}}/coverage.xml:coverage.py
