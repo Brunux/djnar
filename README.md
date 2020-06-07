@@ -1,5 +1,8 @@
 django-webinar or djinar
 ==============================
+[![Maintainability](https://api.codeclimate.com/v1/badges/ee82ab1e02631b1948f4/maintainability)](https://codeclimate.com/github/Brunux/djnar/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ee82ab1e02631b1948f4/test_coverage)](https://codeclimate.com/github/Brunux/djnar/test_coverage)
+![](https://github.com/Brunux/djinar/.github/workflows/django.yml/badge.svg)
 
 WebRTC online meeting app
 
