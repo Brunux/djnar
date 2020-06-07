@@ -7,18 +7,14 @@ from model_utils.models import TimeStampedModel
 
 
 class Contact(TimeStampedModel):
-    """[summary]
-    Model for managing `contact` information.
+    """Model for managing `contact` information."""
 
-    [description]
-
-    """
-    name = models.CharField(_("Full name"), max_length=254)
-    job_title = models.CharField(_("Job title"), max_length=62)
-    company = models.CharField(_("Company Name"), max_length=254)
+    name = models.CharField(_("Full name"), max_length=255)
+    job_title = models.CharField(_("Job title"), max_length=255)
+    company = models.CharField(_("Company Name"), max_length=255)
     email = models.EmailField()
-    contact_number = models.CharField(_("Contact Number"), max_length=16)
-    notes = models.CharField(_("Notes"), max_length=508)
+    contact_number = models.CharField(_("Contact Number"), max_length=62)
+    notes = models.TextField(_("Notes"))
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,

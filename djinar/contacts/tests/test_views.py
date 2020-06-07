@@ -1,62 +1,30 @@
-from django.contrib.auth import get_user_model
-from django.utils import timezone
+from djinar.contacts.models import Contact
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
-from djinar.core.utils import create_user_util, TEST_USERNAME, TEST_PASSWORD
-from djinar.contacts.models import Contact
+from djinar.common.tests import APILoggedInTest
 
 
-def create_test_contact():
-    """[summary]
-    Creates a dummy contact and returns it.
-    [description]
-    """
-    User = get_user_model()
-    user = User.objects.last()
-    if not user:
-        user = create_user_util()
+class ContactTestCase(APILoggedInTest):
+    """Main authenticated tests cases."""
 
-    contact_data = {
-        "name": "TestCase",
-        "job_title": "Sr. Python Developer",
-        "company": "Django",
-        "email": "test@case.dj",
-        "contact_number": "+523319442828",
-        "notes": "This is a test",
-        "owner": user,
-    }
-    contact = Contact.objects.create(**contact_data)
-    return contact
+    def setUp(self, *args, **kwargs):
+        """Adds `self.contact_data` for `Contact` testing."""
 
+        super().setUp(*args, **kwargs)
 
-class ContactTestCase(APITestCase):
-    def setUp(self):
-        User = get_user_model()
-        user = User.objects.last()
-        if not user:
-            user = create_user_util()
-        self.user = user
-        is_logedin = self.client.login(
-            username=TEST_USERNAME, password=TEST_PASSWORD
-        )
-        if not is_logedin:
-            raise Exception("Unable to login test client")
-        self.contact_data = contact_data = {
+        self.contact_data = {
             "job_title": "Sr. Python Developer",
             "company": "Django",
             "email": "test@case.dj",
             "contact_number": "+523319442828",
             "notes": "This is a test",
-            "owner": user.pk,
+            "owner": self.user.pk,
         }
 
     def test_contact_creation(self):
-        """[summary]
-        Test contact creation endpoint.
-        [description]
-        """
+        """Test contact creation endpoint."""
+
         contact_name = "Test Contact Creation"
         contact_data = self.contact_data
         contact_data.update({
@@ -73,10 +41,8 @@ class ContactTestCase(APITestCase):
         contact.delete()
 
     def test_contact_retrieve(self):
-        """[summary]
-        Test contact retrieve endpoint.
-        [description]
-        """
+        """Test contact retrieve endpoint."""
+
         contact_name = "Test Contact for Retrieve"
         contact_data = self.contact_data
         contact_data.update({
@@ -147,10 +113,8 @@ class ContactTestCase(APITestCase):
         contact.delete()
 
     def test_contact_update(self):
-        """[summary]
-        Test contact creation endpoint.
-        [description]
-        """
+        """Test contact creation endpoint."""
+
         contact_name = "Test Contact Creation for Update"
         contact_data = self.contact_data
         contact_data.update({
@@ -180,10 +144,8 @@ class ContactTestCase(APITestCase):
         contact.delete()
 
     def test_contact_deletion(self):
-        """[summary]
-        Test contact deletion endpoint.
-        [description]
-        """
+        """Test contact deletion endpoint."""
+
         contact_name = "Test Contact for Deletion"
         contact_data = self.contact_data
         contact_data.update({
