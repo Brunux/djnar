@@ -45,6 +45,7 @@ LOCALE_PATHS = [BASE_DIR.path("locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# Should be overwritten on other environments.
 DATABASES = {
     # Raises ImproperlyConfigured Exception
     # if DATABASE_URL Not in os.environ and
@@ -53,7 +54,7 @@ DATABASES = {
     # expect a value in the following format:
     # DATABASE_URL=postgres://user:password@hostname_or_ip:port/database_name
     "default": env.db(
-        "DATABASE_URL", default="postgres:///djinar"
+        "DATABASE_URL", default="postgres://django:4dm1n4dm1n@localhost:25432/djinar"
     )
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
