@@ -10,15 +10,16 @@ Development
 ==============================
 Get the repo
 ```sh
-$ git clone git@github.com:Brunux/djnar.git
+$ git clone git@github.com:Brunux/djnar.git && cd djnar
 ```
 
-Crete a virtual environment use you preferred tool or just
+Create a virtual environment with [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) or use your favorite tool.
 ```sh
 $ pip install virtualenv
 $ virtualenv venv
 $ source venv/bin/active
 ```
+
 
 Install dependencies
 ```sh
@@ -36,7 +37,7 @@ $ docker run -d \
     postgres
 ```
 
-Or update Django settings at and add your custom DB configuration
+Or update Django settings
 ```python
 # djinar/config/settings/local.py
 ...
@@ -62,6 +63,11 @@ $ python manage.py migrate
 Run the tests with nice report
 ```sh
 $ coverage run -m pytest
+```
+
+Check tests coverage
+```sh
+$ coverage report
 ```
 
 Run development server
