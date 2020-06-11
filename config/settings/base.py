@@ -93,6 +93,7 @@ LOCAL_APPS = [
     "djinar.contacts.apps.ContactsConfig",
     "djinar.events.apps.EventsConfig",
     "djinar.common.apps.CommonConfig",
+    "djinar.experiments.apps.ExperimentsConfig",
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

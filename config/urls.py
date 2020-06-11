@@ -6,12 +6,8 @@ from django.views import defaults as default_views
 
 urlpatterns = [
     path(
-        "c/",
-        include(("djinar.contacts.urls", "contacts"), namespace="contacts"),
-    ),
-    path(
-        "e/",
-        include(("djinar.events.urls", "events"), namespace="events")
+        "experiments/",
+        include(("djinar.experiments.urls", "experiments"), namespace="experiments"),
     ),
     path(
         "",
@@ -27,6 +23,23 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+"""
+    ImportError at /experiments/webcam
+    cannot import name 'ORDER_PATTERN' from 'django.db.models.sql.constants'
+    (/Users/brunux/opt/miniconda3/envs/djinar/lib/python3.8/site-packages/django/db/models/sql/constants.py)
+    /Users/brunux/opt/miniconda3/envs/djinar/lib/python3.8/site-packages/rest_framework/filters.py, line 11, in <module>
+
+    Looks like the DRF is not compatible with Django 3.1
+    path(
+        "c/",
+        include(("djinar.contacts.urls", "contacts"), namespace="contacts"),
+    ),
+    path(
+        "e/",
+        include(("djinar.events.urls", "events"), namespace="events")
+    ),
+"""
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
