@@ -6,12 +6,8 @@ from django.views import defaults as default_views
 
 urlpatterns = [
     path(
-        "experiments/",
-        include(("djinar.experiments.urls", "experiments"), namespace="experiments"),
-    ),
-    path(
         "",
-        include(("djinar.home.urls", "home"), namespace="home"),
+        include(("djinar.experiments.urls", "experiments"), namespace="experiments"),
     ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
