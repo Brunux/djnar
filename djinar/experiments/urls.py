@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('webcam', views.WebcamView.as_view(), name='webcam'),
-    path('offer', views.OfferView.as_view(), name='offer'),
-    # path('offer', views.offer, name='offer'),
+    path('webcam/offer', views.WebcamOfferView.as_view(), name='webcam-offer'),
+    path('server', views.ServerView.as_view(), name='server'),
+    path('server/offer', views.ServerOfferView.as_view(), name='server-offer'),
 ]
