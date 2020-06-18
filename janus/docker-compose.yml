@@ -1,0 +1,27 @@
+version: '2'
+
+volumes:
+  static-content:
+
+services:
+  janus-gateway:
+    image: 'canyan/janus-gateway:0.9.2'
+    command: ["/usr/local/bin/janus", "-F", "/usr/local/etc/janus"]
+    ports:
+      - "8088:8088"
+      - "8188:8188"
+      - "7088:7088"
+    volumes:
+      - ./conf/:/opt/janus/etc/janus/
+      - ./log/janus.log:/var/log/janus.log
+      - static-content:/opt/janus/share/janus/demos
+    restart: always
+
+  demos:
+    image: python:slim
+    container_name: demos
+    command: python -m http.server 8000 --directory /demos/
+    volumes:
+      - static-content:/demos
+    ports:
+      - 8000:8000
