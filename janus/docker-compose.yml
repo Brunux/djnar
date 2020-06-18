@@ -8,10 +8,11 @@ services:
     image: 'canyan/janus-gateway:0.9.2'
     command: ["/usr/local/bin/janus", "-F", "/usr/local/etc/janus"]
     ports:
-      - "8088:8088"
-      - "8188:8188"
-      - "7088:7088"
-      - "7188:7188"
+      # For now only HTTP and WS, not HTTPS support.
+      - "8088:8088"  # main HTTP signaling API port.
+      - "8188:8188"  # main WS API port.
+      - "7088:7088"  # main HTTP admin API port.
+      - "7188:7188"  # main WS admin API port.
     volumes:
       - ./conf/:/opt/janus/etc/janus/
       - ./log/janus.log:/var/log/janus.log
