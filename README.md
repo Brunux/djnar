@@ -1,16 +1,13 @@
-django-webinar or djinar
+django-webinar or djinar experiments
 ==============================
 [![Maintainability](https://api.codeclimate.com/v1/badges/ee82ab1e02631b1948f4/maintainability)](https://codeclimate.com/github/Brunux/djnar/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ee82ab1e02631b1948f4/test_coverage)](https://codeclimate.com/github/Brunux/djnar/test_coverage)
 ![](https://github.com/Brunux/djinar/.github/workflows/django.yml/badge.svg)
-
-WebRTC online meeting app
 
 Development
 ==============================
 Get the repo
 ```sh
-$ git clone git@github.com:Brunux/djnar.git && cd djnar
+$ git clone git@github.com:Brunux/djnar.git --branch experiments && cd djnar
 ```
 
 Create a virtual environment with [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) or use your favorite tool.
@@ -60,24 +57,12 @@ Apply migrations
 $ python manage.py migrate
 ```
 
-Run the tests with nice report
-```sh
-$ coverage run -m pytest
-```
-
-Check tests coverage
-```sh
-$ coverage report
-```
-
 Run development server
 ```
-$ python manage.py runserver 0:8000
+$ uvicorn project.asgi:application --reload
 ```
 
-Open the webinar interface
+Open experiments
 ```
-http://localhost:8000/
+http://localhost:8000/experiments/
 ```
-
-For more information, see TODO.
