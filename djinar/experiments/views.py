@@ -53,10 +53,6 @@ class WebcamOfferView(CsrfExemptMixin, View):
                 await pc.close()
                 pcs.discard(pc)
 
-        # # open media source
-        # if args.play_from:
-        #     player = MediaPlayer(args.play_from)
-        # else:
         options = {"framerate": "30", "video_size": "640x480"}
         if platform.system() == "Darwin":
             player = MediaPlayer("default:none", format="avfoundation", options=options)
@@ -81,13 +77,13 @@ class WebcamOfferView(CsrfExemptMixin, View):
         )
 
 
-class ServerView(TemplateView):
+class StreamingView(TemplateView):
     """
     """
-    template_name = 'experiments/server.html'
+    template_name = 'experiments/streaming.html'
 
 
-class ServerOfferView(CsrfExemptMixin, View):
+class StreamingOfferView(CsrfExemptMixin, View):
     """
     """
     @classonlymethod
